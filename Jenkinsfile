@@ -7,9 +7,10 @@ pipeline {
     stages {
       stage('static code analysis'){
         steps {
-	      withSonarQubeEnv('sonar')
-          sh 'mvn validate'
-        }
+              withSonarQubeEnv('sonar') {
+                sh 'mvn validate sonar:sonar'
+              }
+            }
        }
       stage('Build') {
         steps {
