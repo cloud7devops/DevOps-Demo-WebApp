@@ -5,12 +5,12 @@ pipeline {
         jdk 'JDK' 
        }
     stages {
-      stage ('Validate"'{
+      stage ('validate"'{
         steps {
           
         }
        }
-      stage ('Compile') {
+      stage ('compile') {
         step {
           sh 'mvn clean compile'
         }
