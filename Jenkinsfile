@@ -5,17 +5,17 @@ pipeline {
         jdk 'JDK' 
        }
     stages {
-      stage ('validate"'{
+      stage('static code analysis'{
         steps {
-          
+          sh 'mvn validate'
         }
        }
-      stage ('compile') {
+      stage('build') {
         step {
-          sh 'mvn clean compile'
+          sh 'mvn clean install'
         }
       }
-      stage ('package') {
+      stage('package creation') {
         step {
           sh 'mvn package'
         }
