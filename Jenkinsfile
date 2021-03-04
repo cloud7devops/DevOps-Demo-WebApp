@@ -5,7 +5,7 @@ pipeline {
         jdk 'JDK' 
        }
     stages {
-      stage('static code analysis'{
+      stage('static code analysis'){
         steps {
           sh 'mvn validate'
         }
