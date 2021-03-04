@@ -20,5 +20,11 @@ pipeline {
           sh 'mvn package'
         }
       }
+	   stage('Deploy') {
+        steps {
+          deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://52.15.79.81:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
+        }
+      }
+	  
     }
 }
