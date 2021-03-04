@@ -7,6 +7,7 @@ pipeline {
     stages {
       stage('static code analysis'){
         steps {
+	  withSonarQubeEnv('sonar') {
           sh 'mvn validate'
         }
        }
