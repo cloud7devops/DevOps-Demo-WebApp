@@ -17,11 +17,11 @@ pipeline {
         steps {
           sh 'mvn clean install'
         }
-      }
-      stage('package creation') {
-        steps {
-          sh 'mvn package'
-        }
+		post {
+		 always {
+              jiraSendBuildInfo site: 'team-1614647321700.atlassian.net'
+              }
+          }
       }
 	   stage('Deploy') {
         steps {
@@ -29,5 +29,18 @@ pipeline {
         }
       }
 	  
+	   stage ('Publish to artifactory') {
+			steps {
+				script {
+				def server = Artifactory.server('artifactory')
+				def rtMaven = Artifactory.newMavenBuild()
+				rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
+				rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
+				rtMaven.deployer.artifactDeploymentPatterns.addInclude("*.war")
+				def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'install'
+				server.publishBuildInfo buildInfo
+				}
+			}
+		} 
     }
 }
