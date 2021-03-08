@@ -21,7 +21,7 @@ pipeline {
               }
           }
       }
-	   stage('Deploy') {
+	   stage('Deploy to QA') {
         steps {
           deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://3.141.28.170:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
         }
@@ -40,6 +40,17 @@ pipeline {
 				}
 			}
 		} 
+		stage ('Run UI Tests') {
+           steps {
+                sh 'mvn -f functionaltest/pom.xml  test' 
+				publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\functionaltest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'UI Test Report', reportTitles: ''])
+            }
+		}
+		stage('Deploy to prod') {
+        steps {
+          deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://3.141.197.43:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
+        }
+      }
 		
 	}
     }
