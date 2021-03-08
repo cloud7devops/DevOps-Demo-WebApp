@@ -25,6 +25,11 @@ pipeline {
         steps {
           deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://3.141.28.170:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
         }
+		post {
+		 always {
+			  jiraSendDeploymentInfo environmentId: 'QA', environmentName: 'QATesting', environmentType: 'testing', site: 'team-1614647321700.atlassian.net'
+              }
+          }
       }
 	  
 	   stage ('Publish to artifactory') {
@@ -56,6 +61,11 @@ pipeline {
         steps {
           deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://3.141.197.43:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
         }
+		post {
+		 always {
+			 jiraSendDeploymentInfo environmentId: 'Prod', environmentName: 'ProdTesting', environmentType: 'production', site: 'team-1614647321700.atlassian.net'
+			 }
+          }
       }
 	  
 	 stage ('Run Acceptance Tests') {
