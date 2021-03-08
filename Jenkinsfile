@@ -17,7 +17,7 @@ pipeline {
         }
 		post {
 		 always {
-              jiraSendBuildInfo site: 'team-1614647321700.atlassian.net'
+			  jiraSendBuildInfo site: 'team-1614647321700.atlassian.net'
               }
           }
       }
@@ -57,6 +57,13 @@ pipeline {
           deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://3.141.197.43:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
         }
       }
+	  
+	 stage ('Run Acceptance Tests') {
+           steps {
+                sh 'mvn -f Acceptancetest/pom.xml  test' 
+				publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\Acceptancetest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'Sanity Test Report', reportTitles: ''])
+            }
+		}	
 		
 	}
     }
