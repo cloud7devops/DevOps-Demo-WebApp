@@ -59,7 +59,7 @@ pipeline {
 		}
 		stage('Deploy to prod') {
         steps {
-          deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://3.141.197.43:8080/')], contextPath: '/QAWebapp', war: '**/*.war'
+          deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://3.141.197.43:8080/')], contextPath: '/ProdWebapp', war: '**/*.war'
         }
 		post {
 		 always {
