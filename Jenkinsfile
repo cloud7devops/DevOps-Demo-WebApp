@@ -1,3 +1,4 @@
+properties([pipelineTriggers([githubPush()])])
 pipeline { 
   agent any
     tools { 
@@ -5,6 +6,18 @@ pipeline {
         jdk 'JDK' 
        }
     stages {
+	   stage('Checkout SCM') {
+		steps {
+		checkout([
+		$class: 'GitSCM',
+		branches: [[name: 'master']],
+		userRemoteConfigs: [[
+        url: 'https://github.com/cloud7devops/DevOps-Demo-WebApp.git',
+        credentialsId: '',
+      ]]
+     ])
+   }
+}
       stage ('static code analysis') {
            steps {
                 sh 'mvn validate'
